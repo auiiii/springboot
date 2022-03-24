@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<assembly>
+    <id>prd</id>
+    <baseDirectory>${project.artifactId}</baseDirectory>
+    <includeBaseDirectory>true</includeBaseDirectory>
+    <formats>
+        <format>tar.gz</format><!--打包的文件格式:tar.zip war zip等-->
+    </formats>
+    <fileSets>
+        <!-- 将src/main/resources下配置问价打包到conf目录 -->
+        <fileSet>
+            <directory>src/main/resources</directory>
+            <outputDirectory>\conf</outputDirectory>
+            <includes>
+                <include>**/*.yml</include>
+            </includes>
+            <filtered>true</filtered><!-- 是否进行属性替换 -->
+        </fileSet>
+
+        <!-- 打包.sh文件到bin 目录 -->
+        <fileSet>
+            <directory>src</directory>
+            <outputDirectory>\conf</outputDirectory>
+            <includes>
+                <include>*.sh</include>
+            </includes>
+            <fileMode>0755</fileMode><!--赋予文件权限-->
+        </fileSet>
+
+        <fileSet>
+            <directory>target</directory>
+            <outputDirectory>lib</outputDirectory>
+            <includes>
+                <include>*.jar</include>
+            </includes>
+        </fileSet>
+
+    </fileSets>
+    <!--依赖输出-->
+    <dependencySets>
+        <dependencySet>
+            <unpack>false</unpack><!--不解压-->
+            <outputDirectory>lib</outputDirectory><!--依赖包输出路径-->
+            <useProjectArtifact>true</useProjectArtifact><!--当前项目构件是否包含在这个依赖集合里。-->
+            <scope>runtime</scope><!-- 将scope为runtime的依赖包打包到lib目录下。 -->
+        </dependencySet>
+    </dependencySets>
+</assembly>
