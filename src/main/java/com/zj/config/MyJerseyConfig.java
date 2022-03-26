@@ -6,6 +6,8 @@ import io.swagger.jaxrs.listing.AcceptHeaderApiListingResource;
 import io.swagger.jaxrs.listing.ApiListingResource;
 import io.swagger.jaxrs.listing.SwaggerSerializers;
 import org.glassfish.jersey.server.ResourceConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
@@ -17,9 +19,12 @@ public class MyJerseyConfig extends ResourceConfig {
     @Value("${spring.jersey.application-path}")
     private String apiPath;
 
+    //private Logger LOG = LoggerFactory.getLogger(getClass());
+
     public MyJerseyConfig()
     {
         //构造函数，在这里注册需要使用的内容，（过滤器，拦截器，API等）
+        //LOG.info("Testing record log in Config-Bean");
         register(TestResource.class);
     }
 
