@@ -1,6 +1,6 @@
 package com.zj.entity;
 
-public class Book {
+public class Book{
 
     private String price;
     private int id;

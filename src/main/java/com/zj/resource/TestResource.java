@@ -1,6 +1,6 @@
 package com.zj.resource;
 
-import com.zj.entity.BookDao;
+import com.zj.service.MyService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +21,7 @@ import java.util.Map;
 public class TestResource {
 
     @Autowired
-    //逻辑简单不要service层了
-    private BookDao dao;
+    private MyService sev;
 
     @GET
     @Path("/test")
@@ -41,10 +40,10 @@ public class TestResource {
     @ApiOperation(value="获取书籍列表", notes="获取书籍列表")
     @Consumes("application/x-www-form-urlencoded")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getBookList()
+    public Response getBookList() throws Exception
     {
         Map<String,Object> map = new HashMap<>();
-        map.put("list", dao.selectAll());
+        map.put("list", sev.selectAll());
         return Response.ok(map).build();
     }
 
