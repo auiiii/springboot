@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:flowable="http://flowable.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.flowable.org/processdef">
+  <process id="test_flow" name="test_flow" isExecutable="true">
+    <documentation>测试demo</documentation>
+    <startEvent id="start" name="启动"></startEvent>
+    <userTask id="register" name="案件登记" flowable:candidateGroups="1">
+      <extensionElements>
+        <modeler:group-info-name-1 xmlns:modeler="http://flowable.org/modeler"><![CDATA[受理员]]></modeler:group-info-name-1>
+        <modeler:activiti-idm-candidate-group xmlns:modeler="http://flowable.org/modeler"><![CDATA[true]]></modeler:activiti-idm-candidate-group>
+        <modeler:initiator-can-complete xmlns:modeler="http://flowable.org/modeler"><![CDATA[false]]></modeler:initiator-can-complete>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="sid-A172CFA1-79EF-4CC7-97C8-A546E594810C" sourceRef="start" targetRef="register"></sequenceFlow>
+    <userTask id="handle" name="案件受理" flowable:candidateGroups="2">
+      <extensionElements>
+        <modeler:group-info-name-2 xmlns:modeler="http://flowable.org/modeler"><![CDATA[监督员]]></modeler:group-info-name-2>
+        <modeler:activiti-idm-candidate-group xmlns:modeler="http://flowable.org/modeler"><![CDATA[true]]></modeler:activiti-idm-candidate-group>
+        <modeler:initiator-can-complete xmlns:modeler="http://flowable.org/modeler"><![CDATA[false]]></modeler:initiator-can-complete>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="sid-52D268D1-003B-4B3A-9D7E-1EA2F7C6C729" sourceRef="register" targetRef="handle"></sequenceFlow>
+    <exclusiveGateway id="exclusive" default="rejected">
+      <documentation>是否处理成功</documentation>
+    </exclusiveGateway>
+    <sequenceFlow id="sid-F3F892A4-CAD3-4AD8-9C8F-97277C269E88" sourceRef="handle" targetRef="exclusive"></sequenceFlow>
+    <userTask id="end" name="结案" flowable:candidateGroups="1">
+      <extensionElements>
+        <modeler:group-info-name-1 xmlns:modeler="http://flowable.org/modeler"><![CDATA[受理员]]></modeler:group-info-name-1>
+        <modeler:activiti-idm-candidate-group xmlns:modeler="http://flowable.org/modeler"><![CDATA[true]]></modeler:activiti-idm-candidate-group>
+        <modeler:initiator-can-complete xmlns:modeler="http://flowable.org/modeler"><![CDATA[false]]></modeler:initiator-can-complete>
+      </extensionElements>
+    </userTask>
+    <userTask id="cancel" name="作废" flowable:assignee="$INITIATOR">
+      <extensionElements>
+        <modeler:activiti-idm-initiator xmlns:modeler="http://flowable.org/modeler"><![CDATA[true]]></modeler:activiti-idm-initiator>
+      </extensionElements>
+    </userTask>
+    <endEvent id="canceled" name="废弃"></endEvent>
+    <sequenceFlow id="sid-7CCC7D79-1728-43C9-B303-AE58F2F87865" sourceRef="cancel" targetRef="canceled"></sequenceFlow>
+    <endEvent id="finish" name="终止"></endEvent>
+    <sequenceFlow id="sid-2E22D9C6-12E2-4FE1-8F5D-B29270D96E18" sourceRef="end" targetRef="finish"></sequenceFlow>
+    <sequenceFlow id="approved" name="success" sourceRef="exclusive" targetRef="end">
+      <documentation>处理成功</documentation>
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${status == "200"}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="rejected" name="fail" sourceRef="exclusive" targetRef="cancel">
+      <documentation>失败流程，处理异常</documentation>
+    </sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_test_flow">
+    <bpmndi:BPMNPlane bpmnElement="test_flow" id="BPMNPlane_test_flow">
+      <bpmndi:BPMNShape bpmnElement="start" id="BPMNShape_start">
+        <omgdc:Bounds height="30.0" width="30.0" x="100.0" y="163.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="register" id="BPMNShape_register">
+        <omgdc:Bounds height="80.0" width="100.0" x="175.0" y="138.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="handle" id="BPMNShape_handle">
+        <omgdc:Bounds height="80.0" width="100.0" x="320.0" y="138.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="exclusive" id="BPMNShape_exclusive">
+        <omgdc:Bounds height="40.0" width="40.0" x="465.0" y="158.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="end" id="BPMNShape_end">
+        <omgdc:Bounds height="80.0" width="100.0" x="550.0" y="138.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="cancel" id="BPMNShape_cancel">
+        <omgdc:Bounds height="80.0" width="100.0" x="550.0" y="255.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="canceled" id="BPMNShape_canceled">
+        <omgdc:Bounds height="28.0" width="28.0" x="695.0" y="281.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="finish" id="BPMNShape_finish">
+        <omgdc:Bounds height="28.0" width="28.0" x="695.0" y="164.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="sid-F3F892A4-CAD3-4AD8-9C8F-97277C269E88" id="BPMNEdge_sid-F3F892A4-CAD3-4AD8-9C8F-97277C269E88">
+        <omgdi:waypoint x="419.94999999999806" y="178.21623376623378"></omgdi:waypoint>
+        <omgdi:waypoint x="465.4130434782609" y="178.4130434782609"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="approved" id="BPMNEdge_approved">
+        <omgdi:waypoint x="504.5247370727428" y="178.41666666666663"></omgdi:waypoint>
+        <omgdi:waypoint x="549.9999999999953" y="178.21812227074236"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="rejected" id="BPMNEdge_rejected">
+        <omgdi:waypoint x="485.5" y="197.44187392795888"></omgdi:waypoint>
+        <omgdi:waypoint x="485.5" y="295.0"></omgdi:waypoint>
+        <omgdi:waypoint x="550.0" y="295.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-A172CFA1-79EF-4CC7-97C8-A546E594810C" id="BPMNEdge_sid-A172CFA1-79EF-4CC7-97C8-A546E594810C">
+        <omgdi:waypoint x="129.9499984899576" y="178.0"></omgdi:waypoint>
+        <omgdi:waypoint x="174.9999999999917" y="178.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-2E22D9C6-12E2-4FE1-8F5D-B29270D96E18" id="BPMNEdge_sid-2E22D9C6-12E2-4FE1-8F5D-B29270D96E18">
+        <omgdi:waypoint x="649.9499999999999" y="178.0"></omgdi:waypoint>
+        <omgdi:waypoint x="695.0" y="178.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-52D268D1-003B-4B3A-9D7E-1EA2F7C6C729" id="BPMNEdge_sid-52D268D1-003B-4B3A-9D7E-1EA2F7C6C729">
+        <omgdi:waypoint x="274.9499999999907" y="178.0"></omgdi:waypoint>
+        <omgdi:waypoint x="319.9999999999807" y="178.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-7CCC7D79-1728-43C9-B303-AE58F2F87865" id="BPMNEdge_sid-7CCC7D79-1728-43C9-B303-AE58F2F87865">
+        <omgdi:waypoint x="649.9499999999999" y="295.0"></omgdi:waypoint>
+        <omgdi:waypoint x="695.0" y="295.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>
